@@ -107,7 +107,7 @@ rm cloudtrail.zip ; zip -r cloudtrail.zip cloudtrail.js node_modules -x node_mod
 # Upload the function
 #
 status "Uploading Lambda function"
-sleep 5 #wait for IAM role to be available to lambda - :-(
+sleep 50 #wait for IAM role to be available to lambda - :-(
 
 FUNCTION_ARN=$(aws lambda create-function --profile $PROFILE --description "My log file analyzer" --region $REGION --zip-file fileb://./cloudtrail.zip --function-name $FUNCTIONNAME --runtime nodejs6.10 --role "$ROLE_EXEC_ARN" --handler cloudtrail.handler --query FunctionArn --output text)
 
