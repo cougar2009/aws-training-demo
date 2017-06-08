@@ -57,7 +57,11 @@ cat > role_execution_policy.json <<EOF
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": ["logs:PutLogEvents"],
+      "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+      ],
       "Resource": "arn:aws:logs:*:*:*"
     },
     {
