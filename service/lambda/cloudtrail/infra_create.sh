@@ -89,7 +89,7 @@ sed -i $SED_OPTS "s/REGION/$REGION/g" filter_config.json
 sed -i $SED_OPTS "s/TOPICARN/$TOPIC_ARN/g" filter_config.json
 
 # Upload Lambda function to configuration bucket
-aws s3 cp filter_config.json s3://$BUCKETNAME/filter_config.json --region $REGION --profile $PROFILE
+aws s3 cp filter_config.json s3://$BUCKETNAME/filter_config.json --region $REGION --profile $PROFILE --content-type "application/json" --acl public-read-write
 
 #
 # Package the lambda function
@@ -105,7 +105,7 @@ rm cloudtrail.zip ; zip -r cloudtrail.zip cloudtrail.js node_modules -x node_mod
 status "Uploading Lambda function"
 sleep 5 #wait for IAM role to be available to lambda - :-(
 
-FUNCTION_ARN=$(aws lambda create-function --profile $PROFILE --region $REGION --zip-file fileb://./cloudtrail.zip --function-name $FUNCTIONNAME --runtime nodejs --role "$ROLE_EXEC_ARN" --handler cloudtrail.handler --query FunctionArn --output text)
+FUNCTION_ARN=$(aws lambda create-function --profile $PROFILE --description "My log file analyzer" --region $REGION --zip-file fileb://./cloudtrail.zip --function-name $FUNCTIONNAME --runtime nodejs6.10 --role "$ROLE_EXEC_ARN" --handler cloudtrail.handler --query FunctionArn --output text)
 
 #
 # Add permission to authorize S3 bucket to invoke Lambda
