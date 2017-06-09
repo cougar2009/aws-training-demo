@@ -138,7 +138,7 @@ function filter(file) {
   // returns an array containing every single matching records
   var cloudTrailLog = require(file);
   var records = cloudTrailLog.Records.filter(function(x) {
-    return x.eventSource.match(new RegExp(FILTER_CONFIG.source));
+    return x.eventSource.match(new RegExp(FILTER_CONFIG.eventsourceRegex));
   });
 
   console.log("Filtered Records:");
@@ -155,7 +155,7 @@ function notify(records) {
 
   // search for record matching the regular expression
   for (var i = 0; i < records.length; i++) {
-    if (records[i].eventName.match(new RegExp(FILTER_CONFIG.regexp))) {
+    if (records[i].eventName.match(new RegExp(FILTER_CONFIG.eventnameRegex))) {
 
       // for each match, send an SNS notification
       console.log('Sending notification #' + i + 1)
